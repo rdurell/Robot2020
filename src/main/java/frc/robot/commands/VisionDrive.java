@@ -7,34 +7,28 @@
 
 package frc.robot.commands;
 
+import edu.wpi.first.wpilibj.command.Command;
 import frc.robot.Robot;
-import frc.robot.commands.drivetrainpower.DrivetrainPower;
-import frc.robot.commands.drivetrainpower.IDrivetrainPowerSource;
-import frc.robot.subsystems.Drivetrain;
+import frc.robot.commands.drivetrainpower.VisionPowerSource;
 
-public class TankDrive extends BaseCommand {
-  private Drivetrain drivetrain;
-  private IDrivetrainPowerSource powerSource;
-  private IDrivetrainPowerSource defualtPowerSource;
- 
-  public TankDrive(IDrivetrainPowerSource defaultPowerSource) {
-    this.defualtPowerSource = defaultPowerSource;
+public class VisionDrive extends Command {
+  VisionPowerSource visionPowerSource;
+  TankDrive tankDrive;
+
+  public VisionDrive() {
   }
 
   // Called just before this Command runs the first time
   @Override
   protected void initialize() {
-    requires(Robot.drivetrain);
- 
-    this.drivetrain = Robot.drivetrain;
+    visionPowerSource = new VisionPowerSource();
+    tankDrive = (TankDrive)Robot.drivetrain.getDefaultCommand();
   }
 
   // Called repeatedly when this Command is scheduled to run
   @Override
   protected void execute() {
-    IDrivetrainPowerSource source = powerSource == null ? defualtPowerSource : powerSource;
-    DrivetrainPower power = source.Get();
-    drivetrain.drive(power.Left, power.Right, power.Angle);
+    tankDrive.setPowerSource(visionPowerSource);
   }
 
   // Make this return true when this Command no longer needs to run execute()
@@ -43,9 +37,10 @@ public class TankDrive extends BaseCommand {
     return false;
   }
 
-  // Called once after isFinished returns true
+  // Called once after isFinished returns true or when cancelled or interrupted
   @Override
   protected void end() {
+    tankDrive.resetPowerSource();
   }
 
   // Called when another command which requires one or more of the same
@@ -54,15 +49,4 @@ public class TankDrive extends BaseCommand {
   protected void interrupted() {
   }
 
-  public void setPowerSource(IDrivetrainPowerSource powerSource){
-    this.powerSource = powerSource;
-  }
-
-  public IDrivetrainPowerSource getPowerSource(){
-    return this.powerSource;
-  }
-
-  public void resetPowerSource(){
-    this.powerSource = null;
-  }
 }

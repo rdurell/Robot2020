@@ -9,6 +9,8 @@ package frc.robot;
 
 
 import edu.wpi.first.wpilibj.Joystick;
+import edu.wpi.first.wpilibj.buttons.JoystickButton;
+import frc.robot.commands.VisionDrive;
 
 /**
  * This class is the glue that binds the controls on the physical operator
@@ -21,6 +23,12 @@ public class OI {
   public OI(){
     driverLeftJoystick = new Joystick(3);    
     driveRightJoystick = new Joystick(2);
+
+    JoystickButton b = new JoystickButton(driverLeftJoystick, 1);
+
+    VisionDrive visionDrive = new VisionDrive();
+    b.whileHeld(visionDrive);
+    
   }
   //// CREATING BUTTONS
   // One type of button is a joystick button which is any button on a

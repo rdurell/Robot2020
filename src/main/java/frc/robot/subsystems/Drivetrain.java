@@ -16,6 +16,7 @@ import com.ctre.phoenix.motorcontrol.can.TalonSRX;
 import edu.wpi.first.wpilibj.command.Subsystem;
 import frc.robot.RobotMap;
 import frc.robot.commands.TankDrive;
+import frc.robot.commands.drivetrainpower.DriverJoysticks;
 import frc.core238.Logger;
 
 /**
@@ -26,27 +27,30 @@ public class Drivetrain extends Subsystem {
   private final TalonSRX rightMasterDrive = RobotMap.SpeedControllers.RightMaster;
   private final TalonSRX leftMasterDrive = RobotMap.SpeedControllers.LeftMaster;
 
-  public Drivetrain(){
+  public Drivetrain() {
     initTalons();
   }
 
   @Override
   public void initDefaultCommand() {
-    setDefaultCommand(new TankDrive());
+    TankDrive tankDriveCommand = new TankDrive(new DriverJoysticks());
+    setDefaultCommand(tankDriveCommand);
   }
 
-  public void drive(double left, double right){
+  public void drive(double left, double right) {
     leftMasterDrive.set(ControlMode.PercentOutput, left);
     rightMasterDrive.set(ControlMode.PercentOutput, -right);
   }
 
   public void drive(double left, double right, double desiredAngle) {
-    double leftSpeed = 867.5 * 309 + left/desiredAngle;//do some math to figure out speed for left and right base on yaw, desired speed, distance, etc.
-    double rightSpeed = 4 * 2 - right/desiredAngle;//do some math to figure out speed for left and right base on yaw, desired speed, distance, etc.
+    double leftSpeed = 867.5 * 309 + left / desiredAngle;// do some math to figure out speed for left and right base on
+                                                         // yaw, desired speed, distance, etc.
+    double rightSpeed = 4 * 2 - right / desiredAngle;// do some math to figure out speed for left and right base on yaw,
+                                                     // desired speed, distance, etc.
     drive(leftSpeed, rightSpeed);
   }
 
-  public void stop(){
+  public void stop() {
     leftMasterDrive.set(ControlMode.PercentOutput, 0);
     rightMasterDrive.set(ControlMode.PercentOutput, 0);
   }
@@ -54,7 +58,7 @@ public class Drivetrain extends Subsystem {
   public void initTalons() {
     var leftDriveFollower1 = RobotMap.SpeedControllers.LeftFollower1;
     var leftDriveFollower2 = RobotMap.SpeedControllers.LeftFollower2;
-    
+
     leftMasterDrive.setInverted(true);
     leftDriveFollower1.setInverted(true);
     leftDriveFollower2.setInverted(true);
@@ -95,40 +99,39 @@ public class Drivetrain extends Subsystem {
     configTalon(rightMasterDrive);
 
     Logger.Debug("initTalons Is Sucessful!");
-}
+  }
 
-    /**
-     * configTalon is used to configure the master talons for velocity tuning so
-     * they can be set to go to a specific velocity rather than just use a
-     * voltage percentage This can be found in the CTRE Talon SRX Software
-     * Reference Manual Section 12.4: Velocity Closed-Loop Walkthrough Java
+  /**
+   * configTalon is used to configure the master talons for velocity tuning so
+   * they can be set to go to a specific velocity rather than just use a voltage
+   * percentage This can be found in the CTRE Talon SRX Software Reference Manual
+   * Section 12.4: Velocity Closed-Loop Walkthrough Java
+   */
+  public void configTalon(TalonSRX talon) {
+    /*
+     * This sets the voltage range the talon can use; should be set at +12.0f and
+     * -12.0f
      */
-    public void configTalon(TalonSRX talon)
-    {
-        /*
-         * This sets the voltage range the talon can use; should be set at
-         * +12.0f and -12.0f
-         */
-        // talon.configNominalOutputVoltage(+0.0f, -0.0f);
-        // talon.configPeakOutputVoltage(+12.0f, -12.0f);
+    // talon.configNominalOutputVoltage(+0.0f, -0.0f);
+    // talon.configPeakOutputVoltage(+12.0f, -12.0f);
 
-        /*
-         * This sets the FPID values to correct error in the motor's velocity
-         */
-        // talon.setProfile(CrusaderCommon.TALON_NO_VALUE);
-        // .3113);
-        talon.config_kP(0, TALON_P_VALUE, 0); // .8);//064543);
-        talon.config_kI(0, TALON_NO_VALUE, 0);
-        talon.config_kD(0, TALON_D_VALUE, 0);
+    /*
+     * This sets the FPID values to correct error in the motor's velocity
+     */
+    // talon.setProfile(CrusaderCommon.TALON_NO_VALUE);
+    // .3113);
+    talon.config_kP(0, TALON_P_VALUE, 0); // .8);//064543);
+    talon.config_kI(0, TALON_NO_VALUE, 0);
+    talon.config_kD(0, TALON_D_VALUE, 0);
 
-        talon.set(ControlMode.Velocity, 0);
+    talon.set(ControlMode.Velocity, 0);
 
-    }
+  }
 
-private final static double TALON_F_VALUE_LEFT = 0.00455;// 0.0725 old autonomous
-private final static double TALON_F_VALUE_RIGHT = 0.00455;// 0.0735 old autonomous
-private final static double TALON_P_VALUE = 0.2;// 0.5
-private final static double TALON_D_VALUE = 0;
-private final static int TALON_NO_VALUE = 0;
+  private final static double TALON_F_VALUE_LEFT = 0.00455;// 0.0725 old autonomous
+  private final static double TALON_F_VALUE_RIGHT = 0.00455;// 0.0735 old autonomous
+  private final static double TALON_P_VALUE = 0.2;// 0.5
+  private final static double TALON_D_VALUE = 0;
+  private final static int TALON_NO_VALUE = 0;
 
 }
