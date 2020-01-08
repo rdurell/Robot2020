@@ -9,10 +9,10 @@ package frc.robot.commands;
 
 import edu.wpi.first.wpilibj.command.Command;
 import frc.robot.Robot;
-import frc.robot.commands.drivetrainpower.VisionPowerSource;
+import frc.robot.commands.drivetrainparameters.VisionParameterSource;
 
 public class VisionDrive extends Command {
-  VisionPowerSource visionPowerSource;
+  VisionParameterSource visionPowerSource;
   TankDrive tankDrive;
 
   public VisionDrive() {
@@ -21,7 +21,7 @@ public class VisionDrive extends Command {
   // Called just before this Command runs the first time
   @Override
   protected void initialize() {
-    visionPowerSource = new VisionPowerSource();
+    visionPowerSource = new VisionParameterSource();
     tankDrive = (TankDrive)Robot.drivetrain.getDefaultCommand();
   }
 

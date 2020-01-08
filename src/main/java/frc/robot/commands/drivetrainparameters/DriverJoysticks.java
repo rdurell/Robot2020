@@ -5,7 +5,7 @@
 /* the project.                                                               */
 /*----------------------------------------------------------------------------*/
 
-package frc.robot.commands.drivetrainpower;
+package frc.robot.commands.drivetrainparameters;
 
 import edu.wpi.first.wpilibj.Joystick;
 import edu.wpi.first.wpilibj.smartdashboard.SmartDashboard;
@@ -14,7 +14,7 @@ import frc.robot.Robot;
 /**
  * Add your docs here.
  */
-public class DriverJoysticks implements IDrivetrainPowerSource{
+public class DriverJoysticks implements IDrivetrainParametersSource{
     private Joystick left;
     private Joystick right;
 
@@ -24,7 +24,7 @@ public class DriverJoysticks implements IDrivetrainPowerSource{
     }
 
     @Override
-    public DrivetrainPower Get() {
+    public DrivetrainParameters Get() {
         double leftJsValue = left.getY();
         double rightJsValue = right.getY();
 
@@ -35,6 +35,6 @@ public class DriverJoysticks implements IDrivetrainPowerSource{
         //Yhis represents x = ax^3+(1-a)x where leftJsValue = x; tuningValue = a;
         double leftPower = (tuningValue * (leftJsValue * leftJsValue * leftJsValue) + (1-tuningValue) * leftJsValue);
         double rightPower = (tuningValue * (rightJsValue * rightJsValue * rightJsValue) + (1-tuningValue) * rightJsValue);
-        return new DrivetrainPower(leftPower, rightPower, 0);
+        return new DrivetrainParameters(leftPower, rightPower, 0);
     }
 }

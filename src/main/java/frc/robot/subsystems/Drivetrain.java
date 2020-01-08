@@ -16,7 +16,7 @@ import com.ctre.phoenix.motorcontrol.can.TalonSRX;
 import edu.wpi.first.wpilibj.command.Subsystem;
 import frc.robot.RobotMap;
 import frc.robot.commands.TankDrive;
-import frc.robot.commands.drivetrainpower.DriverJoysticks;
+import frc.robot.commands.drivetrainparameters.DriverJoysticks;
 import frc.core238.Logger;
 
 /**

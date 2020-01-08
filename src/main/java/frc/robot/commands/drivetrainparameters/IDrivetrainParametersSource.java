@@ -5,13 +5,13 @@
 /* the project.                                                               */
 /*----------------------------------------------------------------------------*/
 
-package frc.robot.commands.drivetrainpower;
+package frc.robot.commands.drivetrainparameters;
 
-import frc.robot.commands.drivetrainpower.DrivetrainPower;
+import frc.robot.commands.drivetrainparameters.DrivetrainParameters;
 
 /**
  * Add your docs here.
  */
-public interface IDrivetrainPowerSource {
-    DrivetrainPower Get();
+public interface IDrivetrainParametersSource {
+    DrivetrainParameters Get();
 }

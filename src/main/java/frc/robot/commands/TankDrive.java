@@ -8,16 +8,16 @@
 package frc.robot.commands;
 
 import frc.robot.Robot;
-import frc.robot.commands.drivetrainpower.DrivetrainPower;
-import frc.robot.commands.drivetrainpower.IDrivetrainPowerSource;
+import frc.robot.commands.drivetrainparameters.DrivetrainParameters;
+import frc.robot.commands.drivetrainparameters.IDrivetrainParametersSource;
 import frc.robot.subsystems.Drivetrain;
 
 public class TankDrive extends BaseCommand {
   private Drivetrain drivetrain;
-  private IDrivetrainPowerSource powerSource;
-  private IDrivetrainPowerSource defualtPowerSource;
+  private IDrivetrainParametersSource powerSource;
+  private IDrivetrainParametersSource defualtPowerSource;
  
-  public TankDrive(IDrivetrainPowerSource defaultPowerSource) {
+  public TankDrive(IDrivetrainParametersSource defaultPowerSource) {
     this.defualtPowerSource = defaultPowerSource;
   }
 
@@ -32,8 +32,8 @@ public class TankDrive extends BaseCommand {
   // Called repeatedly when this Command is scheduled to run
   @Override
   protected void execute() {
-    IDrivetrainPowerSource source = powerSource == null ? defualtPowerSource : powerSource;
-    DrivetrainPower power = source.Get();
+    IDrivetrainParametersSource source = powerSource == null ? defualtPowerSource : powerSource;
+    DrivetrainParameters power = source.Get();
     drivetrain.drive(power.Left, power.Right, power.Angle);
   }
 
@@ -54,11 +54,11 @@ public class TankDrive extends BaseCommand {
   protected void interrupted() {
   }
 
-  public void setPowerSource(IDrivetrainPowerSource powerSource){
+  public void setPowerSource(IDrivetrainParametersSource powerSource){
     this.powerSource = powerSource;
   }
 
-  public IDrivetrainPowerSource getPowerSource(){
+  public IDrivetrainParametersSource getPowerSource(){
     return this.powerSource;
   }
 

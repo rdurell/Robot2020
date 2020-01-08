@@ -5,18 +5,18 @@
 /* the project.                                                               */
 /*----------------------------------------------------------------------------*/
 
-package frc.robot.commands.drivetrainpower;
+package frc.robot.commands.drivetrainparameters;
 
 /**
  * Add your docs here.
  */
-public class DrivetrainPower {
+public class DrivetrainParameters {
     
     public final double Left;
     public final double Right;
     public final double Angle;
 
-    public DrivetrainPower(double left, double right, double angle) {
+    public DrivetrainParameters(double left, double right, double angle) {
         Left = left;
         Right = right;
         Angle = angle;
