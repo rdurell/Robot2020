@@ -7,13 +7,16 @@
 
 package frc.robot;
 
+import java.util.ArrayList;
 import java.util.HashMap;
+import java.util.List;
 
 import edu.wpi.first.wpilibj.TimedRobot;
 import edu.wpi.first.wpilibj.command.CommandGroup;
 import edu.wpi.first.wpilibj.command.Scheduler;
 import edu.wpi.first.wpilibj.smartdashboard.SendableChooser;
 import frc.core238.autonomous.*;
+import frc.robot.commands.DriveStraightNavBoard;
 import frc.robot.subsystems.Drivetrain;
 import frc.robot.subsystems.NavigationBoard;
 import frc.robot.subsystems.Vision;
@@ -63,6 +66,17 @@ public class Robot extends TimedRobot {
     IAutonomousModeDataSource autoModesDataSource = new DataFileAutonomousModeDataSource("/home/lvuser/amode238.txt");
     AutonomousModesReader reader = new AutonomousModesReader(autoModesDataSource);
     m_autoModes = reader.getAutonmousModes();
+
+    if (m_autoModes.size() == 0){
+      CommandGroup cg = new CommandGroup();
+      DriveStraightNavBoard cmd = new DriveStraightNavBoard();
+      List<String> parameters = new ArrayList<>();
+      parameters.add("10");
+      parameters.add("10");
+      cmd.setParameters(parameters);
+      cg.addSequential(cmd);
+      m_autoModes.put("No auto modes found -- default command!", cg);
+    }
 
     if (m_autoModes.size() > 0) {
       Boolean first = true;

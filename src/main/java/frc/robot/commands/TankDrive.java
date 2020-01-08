@@ -18,15 +18,16 @@ public class TankDrive extends BaseCommand {
   private IDrivetrainParametersSource defaultParameterSource;
  
   public TankDrive(IDrivetrainParametersSource defaultParameterSource) {
+    requires(Robot.drivetrain);
+ 
+    this.drivetrain = Robot.drivetrain;
     this.defaultParameterSource = defaultParameterSource;
   }
 
   // Called just before this Command runs the first time
   @Override
   protected void initialize() {
-    requires(Robot.drivetrain);
- 
-    this.drivetrain = Robot.drivetrain;
+
   }
 
   // Called repeatedly when this Command is scheduled to run

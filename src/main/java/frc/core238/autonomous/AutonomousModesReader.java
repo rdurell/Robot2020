@@ -75,10 +75,15 @@ public class AutonomousModesReader {
 
     private List<AutonomousModeDescriptor> getAutonomousModeDescriptors() {
 
+        List<AutonomousModeDescriptor> modeDescriptors = new ArrayList<AutonomousModeDescriptor>();
         final String json = dataSource.getJson();
+
+        if (json == null) {
+            return modeDescriptors;
+        }
+
         final ObjectMapper mapper = new ObjectMapper();
 
-        List<AutonomousModeDescriptor> modeDescriptors = new ArrayList<AutonomousModeDescriptor>();
         try {
             modeDescriptors = mapper.readValue(json, new TypeReference<List<AutonomousModeDescriptor>>() {});
         } catch (JsonMappingException e) {
