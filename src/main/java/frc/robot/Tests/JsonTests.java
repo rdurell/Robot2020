@@ -37,7 +37,7 @@ public class JsonTests {
     }
 
     @Test
-    public void test1() throws JsonMappingException, JsonProcessingException {
+    public void AutonomousModeReaderTest() throws JsonMappingException, JsonProcessingException {
         /*
          * [ { "name": "Some auto mode", "commands": [ { "name":
          * "DriveStraightNavBoard", "parameters": [ "1", "2" ] }, { "name":
@@ -68,7 +68,7 @@ public class JsonTests {
     }
 
     @Test
-    public void test2() throws IOException {
+    public void AutonmousModeCommandFileGenerationTest() throws IOException {
         List<AutonomousCommandDescriptor> descriptors = new ArrayList<AutonomousCommandDescriptor>();
 
         Reflections reflections = new Reflections("frc.robot.commands", new TypeAnnotationsScanner(), new SubTypesScanner(false));
