@@ -24,6 +24,12 @@ import frc.core238.Logger;
  */
 public class Drivetrain extends Subsystem {
 
+  public final static double TICKS_PER_INCH = 194;
+  private final static double ANGLE_KP = 3;
+  private final double kV = 0.00434;// 0.00455
+  private final double kA = 00.00434 * 0.15;
+  private final double vSetpoint = 0.078;// 0.078
+
   private final TalonSRX rightMasterDrive = RobotMap.SpeedControllers.RightMaster;
   private final TalonSRX leftMasterDrive = RobotMap.SpeedControllers.LeftMaster;
 
@@ -43,11 +49,55 @@ public class Drivetrain extends Subsystem {
   }
 
   public void drive(double left, double right, double desiredAngle) {
-    double leftSpeed = 867.5 * 309 + left / desiredAngle;// do some math to figure out speed for left and right base on
-                                                         // yaw, desired speed, distance, etc.
-    double rightSpeed = 4 * 2 - right / desiredAngle;// do some math to figure out speed for left and right base on yaw,
-                                                     // desired speed, distance, etc.
-    drive(leftSpeed, rightSpeed);
+
+    if (desiredAngle == 0) {
+      drive(left, right);
+    } else {
+      if (Math.abs(desiredAngle) > (360.0 - 0.0) / 2.0D) {
+        desiredAngle = desiredAngle > 0.0D ? desiredAngle - 360.0 + 0.0 : desiredAngle + 360.0 - 0.0;
+      }
+
+      double angleVelocityAddend = desiredAngle * ANGLE_KP;
+      angleVelocityAddend = Math.min(50, Math.max(angleVelocityAddend, -50));
+
+      accelerate(left + angleVelocityAddend, right - angleVelocityAddend, left, right);     
+    }
+  }
+
+  // method to accelerate rather than set straigt power
+  public void accelerate(double leftSpeed, double rightSpeed, double leftAccel, double rightAccel) {
+
+    /*
+     * the joystick value is multiplied by a target RPM so the robot works with the
+     * velocity tuning code
+     */
+
+    double leftWantedVoltage = 0;
+    leftWantedVoltage += kV * leftSpeed;
+    leftWantedVoltage += kA * leftAccel;
+
+    leftWantedVoltage += leftWantedVoltage > 0 ? vSetpoint : -vSetpoint;
+
+    double rightWantedVoltage = 0;
+    rightWantedVoltage += kV * rightSpeed;
+    rightWantedVoltage += kA * rightAccel;
+    rightWantedVoltage += rightWantedVoltage > 0 ? vSetpoint : -vSetpoint;
+
+    leftMasterDrive.config_kF(0, TALON_F_VALUE_LEFT * 10.0, 0);
+    rightMasterDrive.config_kF(0, TALON_F_VALUE_RIGHT * 10.0, 0);
+
+    leftMasterDrive.set(ControlMode.Velocity, (-leftSpeed) * TICKS_PER_INCH / 10.0);
+    rightMasterDrive.set(ControlMode.Velocity, (-rightSpeed) * TICKS_PER_INCH / 10.0);
+    // Logger.Log("DriveTrain.driveSpeedAccel() LEFT Speed = " + -leftSpeed + "RIGHT
+    // Speed = " + -rightSpeed);
+    // Logger.Log("Drive Accel RIGHT Speed:" + -rightSpeed);
+    // convert to inches/second
+    // Logger.Log("DriveTrain() : driveSpeed() : RIGHT SPEED IS ="
+    // + leftFrontDrive.getSelectedSensorVelocity(0) /
+    // CrusaderCommon.DRIVE_FORWARD_ENCODER_TICKS_PER_INCH);
+    // Logger.Log("DriveTrain() : driveSpeed() : RIGHT ERROR IS =" +
+    // rightFrontDrive.getClosedLoopError(0));
+
   }
 
   public void stop() {
@@ -133,5 +183,29 @@ public class Drivetrain extends Subsystem {
   private final static double TALON_P_VALUE = 0.2;// 0.5
   private final static double TALON_D_VALUE = 0;
   private final static int TALON_NO_VALUE = 0;
+
+  /**
+   * Resets the encoders by setting them to 0
+   */
+  public void resetEncoders() {
+    leftMasterDrive.setSelectedSensorPosition(0, 0, 0);
+    rightMasterDrive.setSelectedSensorPosition(0, 0, 0);
+  }
+
+  // return distance travelled in inches
+  public double leftDistanceTravelled() {
+    double leftTicks = leftMasterDrive.getSelectedSensorPosition(0);
+    double leftDistanceTravelled = leftTicks / TICKS_PER_INCH;
+    Logger.Trace("LEFT TICKS: " + leftTicks + "  Left Distance Travelled  " + leftDistanceTravelled);
+    return leftDistanceTravelled;
+  }
+
+  // return distance travelled in inches
+  public double rightDistanceTravelled() {
+    double rightTicks = rightMasterDrive.getSelectedSensorPosition(0);
+    double rightDistanceTravelled = rightTicks / TICKS_PER_INCH;
+    Logger.Trace("RIGHT TICKS: " + rightTicks);
+    return rightDistanceTravelled;
+  }
 
 }
