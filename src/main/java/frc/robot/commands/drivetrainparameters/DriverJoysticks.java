@@ -14,7 +14,7 @@ import frc.robot.Robot;
 /**
  * Add your docs here.
  */
-public class DriverJoysticks implements IDrivetrainParametersSource{
+public class DriverJoysticks implements IDrivetrainParametersSource {
     private Joystick left;
     private Joystick right;
 
@@ -28,11 +28,11 @@ public class DriverJoysticks implements IDrivetrainParametersSource{
         double leftJsValue = left.getY();
         double rightJsValue = right.getY();
 
-        //should have some sort of abstraction in case we want to pull number for somewhere else
+        //should have some sort of abstraction in case we want to pull number from somewhere else
         double tuningValue = SmartDashboard.getNumber("DRIVETRAIN TUNING", 0.2);
 
         //scaling the stick to power ratio -- accelate the "power" the closer you get to the high or low position on the sitck 
-        //Yhis represents x = ax^3+(1-a)x where leftJsValue = x; tuningValue = a;
+        //This represents x = ax^3+(1-a)x where leftJsValue = x; tuningValue = a;
         double leftPower = (tuningValue * (leftJsValue * leftJsValue * leftJsValue) + (1-tuningValue) * leftJsValue);
         double rightPower = (tuningValue * (rightJsValue * rightJsValue * rightJsValue) + (1-tuningValue) * rightJsValue);
         return new DrivetrainParameters(leftPower, rightPower, 0);

@@ -14,11 +14,11 @@ import frc.robot.subsystems.Drivetrain;
 
 public class TankDrive extends BaseCommand {
   private Drivetrain drivetrain;
-  private IDrivetrainParametersSource powerSource;
-  private IDrivetrainParametersSource defualtPowerSource;
+  private IDrivetrainParametersSource parameterSource;
+  private IDrivetrainParametersSource defaultParameterSource;
  
-  public TankDrive(IDrivetrainParametersSource defaultPowerSource) {
-    this.defualtPowerSource = defaultPowerSource;
+  public TankDrive(IDrivetrainParametersSource defaultParameterSource) {
+    this.defaultParameterSource = defaultParameterSource;
   }
 
   // Called just before this Command runs the first time
@@ -32,9 +32,9 @@ public class TankDrive extends BaseCommand {
   // Called repeatedly when this Command is scheduled to run
   @Override
   protected void execute() {
-    IDrivetrainParametersSource source = powerSource == null ? defualtPowerSource : powerSource;
-    DrivetrainParameters power = source.Get();
-    drivetrain.drive(power.Left, power.Right, power.Angle);
+    IDrivetrainParametersSource source = parameterSource == null ? defaultParameterSource : parameterSource;
+    DrivetrainParameters parameters = source.Get();
+    drivetrain.drive(parameters.Left, parameters.Right, parameters.Angle);
   }
 
   // Make this return true when this Command no longer needs to run execute()
@@ -54,15 +54,15 @@ public class TankDrive extends BaseCommand {
   protected void interrupted() {
   }
 
-  public void setPowerSource(IDrivetrainParametersSource powerSource){
-    this.powerSource = powerSource;
+  public void setParameterSource(IDrivetrainParametersSource parameterSource){
+    this.parameterSource = parameterSource;
   }
 
-  public IDrivetrainParametersSource getPowerSource(){
-    return this.powerSource;
+  public IDrivetrainParametersSource getParameterSource(){
+    return this.parameterSource;
   }
 
-  public void resetPowerSource(){
-    this.powerSource = null;
+  public void resetParameterSource(){
+    this.parameterSource = null;
   }
 }

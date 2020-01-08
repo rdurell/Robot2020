@@ -129,7 +129,7 @@ public class Robot extends TimedRobot {
       m_autoCommandGroup.start();
     }
 
-    // prevent the robot from rerunning auto mode a second time wihtou a restart
+    // prevent the robot from rerunning auto mode a second time without a restart
     m_allowAuto = false;
   }
 
