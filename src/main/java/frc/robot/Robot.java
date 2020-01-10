@@ -15,6 +15,7 @@ import edu.wpi.first.wpilibj.TimedRobot;
 import edu.wpi.first.wpilibj.command.CommandGroup;
 import edu.wpi.first.wpilibj.command.Scheduler;
 import edu.wpi.first.wpilibj.smartdashboard.SendableChooser;
+import edu.wpi.first.wpilibj.smartdashboard.SmartDashboard;
 import frc.core238.autonomous.*;
 import frc.robot.commands.DriveStraightNavBoard;
 import frc.robot.subsystems.Drivetrain;
@@ -90,6 +91,7 @@ public class Robot extends TimedRobot {
           m_chooser.addOption(name, name);
         }
       }
+      SmartDashboard.putData("Auto Modes", m_chooser);
     }
   }
 
